@@ -278,7 +278,12 @@ function PesertaCard({ peserta: p }: { peserta: Peserta }) {
       {/* Header */}
       <div className="p-4 pb-3">
         <div className="mb-1 flex items-start justify-between gap-2">
-          <h2 className="text-sm font-bold leading-snug">{p.nama_peserta}</h2>
+          <div className="flex items-start gap-2 min-w-0">
+            <span className="shrink-0 rounded-lg bg-purple-100 px-1.5 py-0.5 text-[10px] font-extrabold tabular-nums text-purple-600 dark:bg-purple-500/20 dark:text-purple-300">
+              #{p.no}
+            </span>
+            <h2 className="text-sm font-bold leading-snug">{p.nama_peserta}</h2>
+          </div>
           <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold ring-1 ${statusStyle}`}>
             {statusLabel}
           </span>
