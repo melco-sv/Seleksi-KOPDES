@@ -5,4 +5,6 @@ export interface Peserta {
   jabatan: string
   kualifikasi_pendidikan: string
   keterangan: string
+  kognitif: number | null
+  substansi: number | null
 }

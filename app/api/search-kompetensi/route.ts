@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import pool from '@/lib/db'
-import { Peserta } from '@/types/peserta'
+import { HasilSeleksi } from '@/types/hasil-seleksi'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const query = searchParams.get('q')?.trim() ?? ''
-  const table = process.env.DB_TABLE ?? 'peserta_hasil'
 
   if (!query) {
     return NextResponse.json({ data: [], total: 0 })
@@ -14,25 +13,15 @@ export async function GET(request: NextRequest) {
   try {
     const searchTerm = `%${query}%`
     const [rows] = await pool.execute(
-      `SELECT
-         p.no,
-         p.nomor_kartu_ujian,
-         p.nama_peserta,
-         p.jabatan,
-         p.kualifikasi_pendidikan,
-         p.keterangan,
-         h.kognitif,
-         h.substansi
-       FROM \`${table}\` p
-       LEFT JOIN hasil_seleksi_kompetensi h
-         ON h.nomor_peserta = p.nomor_kartu_ujian
-       WHERE p.nama_peserta LIKE ?
-       ORDER BY p.nama_peserta ASC
+      `SELECT no, nomor_peserta, nama, kognitif, substansi, status
+       FROM hasil_seleksi_kompetensi
+       WHERE nama LIKE ?
+       ORDER BY nama ASC
        LIMIT 100`,
       [searchTerm]
     )
 
-    const data = rows as Peserta[]
+    const data = rows as HasilSeleksi[]
     return NextResponse.json({ data, total: data.length })
   } catch (error) {
     console.error('Database error:', error)
